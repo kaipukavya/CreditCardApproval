@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Credit Card Approval Prediction</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 30px 15px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e8edff, #f5eaff);
+            color: #24304a;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 30px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(40, 50, 100, 0.12);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #4f46e5;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #667085;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .section-title {
+            margin-top: 25px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #4338ca;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            background: white;
+            font-size: 15px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 28px;
+            padding: 15px;
+            border: none;
+            border-radius: 9px;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.92;
+        }
+
+        .result {
+            margin-top: 25px;
+            padding: 22px;
+            text-align: center;
+            background: #eef2ff;
+            border-radius: 12px;
+            overflow-wrap: anywhere;
+        }
+
+        .result h2 {
+            margin-top: 0;
+            color: #4338ca;
+        }
+
+        .confidence {
+            margin: 15px 0 8px;
+            font-size: 17px;
+            font-weight: bold;
+        }
+
+        .progress {
+            height: 12px;
+            margin-top: 10px;
+            overflow: hidden;
+            border-radius: 10px;
+            background: #dbe1f0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            border-radius: 10px;
+        }
+
+        .error {
+            margin-top: 20px;
+            padding: 14px;
+            color: #991b1b;
+            background: #fee2e2;
+            border-radius: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .note {
+            margin-top: 22px;
+            color: #667085;
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+
+    <h1>Credit Card Approval Prediction</h1>
+
+    <p class="subtitle">
+        Enter the applicant details to get a machine-learning prediction.
+    </p>
+
+    <form action="/predict" method="POST">
+
+        <h3 class="section-title">Personal Information</h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label for="Gender">Gender</label>
+                <select id="Gender" name="Gender" required>
+                    <option value="">Select gender</option>
+                    <option value="a">Female</option>
+                    <option value="b">Male</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Age">Age</label>
+                <input id="Age" name="Age" type="number"
+                       min="0" step="any" required>
+            </div>
+
+            <div class="form-group">
+                <label for="Married">Marital Status</label>
+                <select id="Married" name="Married" required>
+                    <option value="">Select status</option>
+                    <option value="y">Married</option>
+                    <option value="u">Unmarried</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Citizen">Citizenship Category</label>
+                <input id="Citizen" name="Citizen"
+                       placeholder="Enter a dataset category"
+                       required>
+            </div>
+
+        </div>
+
+        <h3 class="section-title">Financial Information</h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label for="Debt">Debt</label>
+                <input id="Debt" name="Debt" type="number"
+                       min="0" step="any" required>
+            </div>
+
+            <div class="form-group">
+                <label for="YearsEmployed">Years Employed</label>
+                <input id="YearsEmployed" name="YearsEmployed"
+                       type="number" min="0" step="any" required>
+            </div>
+
+            <div class="form-group">
+                <label for="CreditScore">Credit Score</label>
+                <input id="CreditScore" name="CreditScore"
+                       type="number" min="0" step="any" required>
+            </div>
+
+            <div class="form-group">
+                <label for="Income">Income</label>
+                <input id="Income" name="Income" type="number"
+                       min="0" step="any" required>
+            </div>
+
+            <div class="form-group">
+                <label for="BankCustomer">Bank Customer</label>
+                <select id="BankCustomer" name="BankCustomer" required>
+                    <option value="">Select option</option>
+                    <option value="g">Yes</option>
+                    <option value="p">No</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="PriorDefault">Previous Default</label>
+                <select id="PriorDefault" name="PriorDefault" required>
+                    <option value="">Select option</option>
+                    <option value="t">Yes</option>
+                    <option value="f">No</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Employed">Currently Employed</label>
+                <select id="Employed" name="Employed" required>
+                    <option value="">Select option</option>
+                    <option value="t">Yes</option>
+                    <option value="f">No</option>
+                </select>
+            </div>
+
+        </div>
+
+        <h3 class="section-title">Additional Information</h3>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label for="Industry">Industry Category</label>
+                <input id="Industry" name="Industry"
+                       placeholder="Enter a dataset category"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="Ethnicity">Ethnicity Category</label>
+                <input id="Ethnicity" name="Ethnicity"
+                       placeholder="Enter a dataset category"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="DriversLicense">Driver's License</label>
+                <select id="DriversLicense" name="DriversLicense" required>
+                    <option value="">Select option</option>
+                    <option value="t">Yes</option>
+                    <option value="f">No</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="ZipCode">ZIP Code Category</label>
+                <input id="ZipCode" name="ZipCode"
+                       placeholder="Enter a dataset value"
+                       required>
+            </div>
+
+        </div>
+
+        <button type="submit">Predict Approval</button>
+
+    </form>
+
+    {% if result is defined %}
+    <div class="result">
+        <h2>{{ result }}</h2>
+
+        {% if confidence is not none %}
+            <p class="confidence">
+                Model Confidence: {{ confidence }}%
+            </p>
+
+            <div class="progress">
+                <div class="progress-bar"
+                     style="width: {{ confidence }}%;">
+                </div>
+            </div>
+        {% endif %}
+
+        <p class="note">
+            This is a machine-learning prediction, not a guarantee
+            of actual credit card approval.
+        </p>
+    </div>
+    {% endif %}
+
+    {% if error is defined %}
+    <div class="error">
+        {{ error }}
+    </div>
+    {% endif %}
+
+
+</div>
+</body>
+</html>

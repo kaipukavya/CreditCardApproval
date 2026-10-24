@@ -1,10 +1,11 @@
 
 
-numpy
+Flask
+gunicorn
 pandas
-matplotlib
-seaborn
+numpy
 scikit-learn
 xgboost
-flask
 joblib
+matplotlib
+seaborn
